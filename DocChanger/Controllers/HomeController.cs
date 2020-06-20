@@ -199,6 +199,7 @@ namespace DocChanger.Controllers
 
             tw.Close();
 
+
             var memory = new MemoryStream();
             using (var stream = new FileStream(path, FileMode.Open))
             {
