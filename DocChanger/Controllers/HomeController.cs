@@ -100,7 +100,7 @@ namespace DocChanger.Controllers
 
                     return RedirectToAction("List");
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
 
                 }
