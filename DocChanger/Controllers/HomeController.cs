@@ -125,15 +125,15 @@ namespace DocChanger.Controllers
 
             foreach (var item in model)
             {
-                mt103.Add(":32A:" + DateTime.Now.ToString("ddMMyy") + item.Currency + item.Amount.ToString("F", CultureInfo.InvariantCulture));
+                mt103.Add(":32A:" + DateTime.Now.ToString("yyMMdd") + item.Currency + item.Amount.ToString("F", CultureInfo.CurrentCulture));
                 mt103.Add(":50:" + "GRECOS HOLIDAY");
                 mt103.Add("UL. GRUNWALDZKA 76 A");
                 mt103.Add("60-311 POZNAŃ");
                 mt103.Add(":52D:" + item.GrecosBank1);
                 mt103.Add(item.GrecosBank2);
                 mt103.Add("");
-                mt103.Add("               " + item.Country + " " + item.Country);
-                mt103.Add(":57:" + item.SWIFT);
+                mt103.Add("               " + item.Country + " " + item.IBAN.Substring(0,2));
+                mt103.Add(":57A:" + item.SWIFT);
                 mt103.Add(":59:/" + item.IBAN);
 
                 if (item.Name.Length > 35)
@@ -183,7 +183,7 @@ namespace DocChanger.Controllers
 
                 mt103.Add(":71A:" + item.Commission);
                 mt103.Add(":72:");
-                mt103.Add("\\" + item.Category + "\\");
+                mt103.Add("/" + item.Category + "/");
                 mt103.Add("\\" + item.Realisation + "\\");
             }
 
