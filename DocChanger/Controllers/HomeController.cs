@@ -125,7 +125,8 @@ namespace DocChanger.Controllers
 
             foreach (var item in model)
             {
-                mt103.Add(":32A:" + DateTime.Now.ToString("yyMMdd") + item.Currency + item.Amount.ToString("F", CultureInfo.CurrentCulture));
+                //mt103.Add(":32A:" + DateTime.Now.ToString("yyMMdd") + item.Currency + item.Amount.ToString("F", CultureInfo.CurrentCulture));
+                mt103.Add(":32A:" + item.Date.ToString("yyMMdd") + item.Currency + item.Amount.ToString("F", CultureInfo.CurrentCulture));
                 mt103.Add(":50:" + "GRECOS HOLIDAY");
                 mt103.Add("UL. GRUNWALDZKA 76 A");
                 mt103.Add("60-311 POZNAŃ");
