@@ -219,12 +219,14 @@ namespace DocChanger.Controllers
 
             List<string> mt103 = new List<string>();
 
-            foreach (var item in model)
-            {
-                mt103.Add(":04:" + item.GrecosBank1.Substring(4, 8));
+                mt103.Add(":04:" + model.FirstOrDefault().GrecosBank1.Substring(4, 8));
                 mt103.Add(":05:" + "GRECOS HOLIDAY");
                 mt103.Add("UL. GRUNWALDZKA 76 A");
                 mt103.Add("60-311 POZNAŃ");
+
+            foreach (var item in model)
+            {
+               
                 mt103.Add(":20:2");
                 mt103.Add(":32A:" + item.Date.ToString("yyMMdd") + item.Currency + item.Amount.ToString("F", CultureInfo.CurrentCulture));
                 mt103.Add(":50:" + "GRECOS HOLIDAY");
@@ -284,12 +286,125 @@ namespace DocChanger.Controllers
                 }
 
                 mt103.Add(":71A:" + item.Commission);
-                mt103.Add(":72: 00 00 00 00");
+                mt103.Add(":72:");
                 mt103.Add("");
                 mt103.Add("/" + item.Realisation + "/");
             }
 
             var filename = "mt103_ING.pla";
+            var path = Path.Combine(_env.WebRootPath, filename);
+
+            TextWriter tw = new StreamWriter(path);
+
+            foreach (var item in mt103)
+            {
+                tw.WriteLine(item);
+            }
+
+            tw.Close();
+
+
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(path, FileMode.Open))
+            {
+                stream.CopyTo(memory);
+            }
+            memory.Position = 0;
+
+            return File(memory, "text/csv", Path.GetFileName(path));
+        }
+
+        //Raport MT103 dla banku Santander
+        public IActionResult RaportSR()
+        {
+            List<ImportModel> model = JsonConvert.DeserializeObject<List<ImportModel>>((string)TempData["MyNewData"]);
+
+            List<string> mt103 = new List<string>();
+
+            int x = 0;
+
+            mt103.Add(":01:" + DateTime.Today.ToString("yyyyMMddhhmmss"));
+            mt103.Add(":02:" + model.Sum(x => x.Amount).ToString());
+            mt103.Add(":03:" + model.Count().ToString());
+            mt103.Add(":05:" + "GRECOS HOLIDAY");
+            mt103.Add("UL. GRUNWALDZKA 76 A");
+            mt103.Add("60-311 POZNAŃ");
+
+            foreach (var item in model)
+            {
+                if (x > 0)
+                    mt103.Add("$");
+
+                mt103.Add("{1:F01" + item.GrecosBank1.Substring(4, 8) + "XXXX0001000001}" + "{2:I100" + item.SWIFT + "XXXXN1}" + "{4:");
+                mt103.Add(":20:2");
+                mt103.Add(":32A:" + item.Date.ToString("yyMMdd") + item.Currency + item.Amount.ToString("F", CultureInfo.CurrentCulture));
+                mt103.Add(":50:" + "GRECOS HOLIDAY");
+                mt103.Add("UL. GRUNWALDZKA 76 A");
+                mt103.Add("60-311 POZNAŃ");
+                mt103.Add("POLAND");
+                mt103.Add(":52D:" + item.GrecosBank1.Substring(2));
+                mt103.Add(item.GrecosBank2.Substring(2));
+                mt103.Add("");
+                mt103.Add("               " + item.Country + " " + item.IBAN.Substring(0, 2));
+                mt103.Add(":57A:" + item.SWIFT);
+                mt103.Add(":57D:");
+                mt103.Add(":59:/" + item.IBAN);
+
+                if (item.Name.Length > 35)
+                {
+                    mt103.Add(item.Name.Substring(0, 35));
+                    mt103.Add(item.Name.Substring(35));
+                }
+                else
+                {
+                    mt103.Add(item.Name);
+                }
+
+                if (item.Address.Length > 35)
+                {
+                    mt103.Add(item.Address.Substring(0, 35));
+                    mt103.Add(item.Address.Substring(35));
+                }
+                else
+                {
+                    mt103.Add(item.Address);
+                }
+
+                if (item.Title.Length <= 31)
+                {
+                    mt103.Add(":70:" + item.Title);
+                }
+                else if (item.Title.Length > 31 && item.Title.Length <= 66)
+                {
+                    mt103.Add(":70:" + item.Title.Substring(0, 31));
+                    mt103.Add(item.Title.Substring(31));
+                }
+
+                else if (item.Title.Length > 66 && item.Title.Length <= 101)
+                {
+                    mt103.Add(":70:" + item.Title.Substring(0, 31));
+                    mt103.Add(item.Title.Substring(31, 35));
+                    mt103.Add(item.Title.Substring(66));
+                }
+
+                else if (item.Title.Length > 101 && item.Title.Length <= 136)
+                {
+                    mt103.Add(":70:" + item.Title.Substring(0, 31));
+                    mt103.Add(item.Title.Substring(31, 35));
+                    mt103.Add(item.Title.Substring(66, 35));
+                    mt103.Add(item.Title.Substring(101));
+                }
+
+                mt103.Add(":71A:" + item.Commission);
+                mt103.Add(":72:");
+                mt103.Add("");
+                mt103.Add("/" + item.Realisation + "/");
+                mt103.Add("-}");
+
+                x++;
+            }
+
+            var filename = "mt103_SR.pla";
             var path = Path.Combine(_env.WebRootPath, filename);
 
             TextWriter tw = new StreamWriter(path);
