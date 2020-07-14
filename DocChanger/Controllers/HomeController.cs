@@ -73,13 +73,19 @@ namespace DocChanger.Controllers
                         {
                             string[] rows = sreader.ReadLine().Split(';');
 
+                            var dateFromFile = rows[4].Split('.');
+                            var day = Int32.Parse(dateFromFile[0]);
+                            var month = Int32.Parse(dateFromFile[1]);
+                            var year = Int32.Parse(dateFromFile[2]);
+                            var dateConverted = new DateTime(year, month, day);
+
                             mt.Add(new ImportModel
                             {
                                 Dest = rows[0],
                                 HotelCode = rows[1],
                                 Hotel = rows[2],
                                 Amount = float.Parse(rows[3]),
-                                Date = DateTime.Parse(rows[4]),
+                                Date = dateConverted,
                                 Name = rows[5],
                                 Address = rows[6],
                                 Country = rows[7],
