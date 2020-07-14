@@ -139,7 +139,12 @@ namespace DocChanger.Controllers
                     mt103.Add(":57A:" + item.SWIFT);
                     mt103.Add(":59:/" + item.IBAN);
 
-                    if (item.Name.Length > 35)
+                    if (item.Name.Length > 70)
+                    {
+                        mt103.Add(item.Name.Substring(0, 35));
+                        mt103.Add(item.Name.Substring(35, 35));
+                    }
+                    else if (item.Name.Length > 35 && item.Name.Length <= 70)
                     {
                         mt103.Add(item.Name.Substring(0, 35));
                         mt103.Add(item.Name.Substring(35));
@@ -149,7 +154,12 @@ namespace DocChanger.Controllers
                         mt103.Add(item.Name);
                     }
 
-                    if (item.Address.Length > 35)
+                    if (item.Address.Length > 70)
+                    {
+                        mt103.Add(item.Address.Substring(0, 35));
+                        mt103.Add(item.Address.Substring(35, 35));
+                    }
+                    if (item.Address.Length > 35 && item.Address.Length <= 70)
                     {
                         mt103.Add(item.Address.Substring(0, 35));
                         mt103.Add(item.Address.Substring(35));
@@ -250,7 +260,12 @@ namespace DocChanger.Controllers
                     mt103.Add(":57D:");
                     mt103.Add(":59:/" + item.IBAN);
 
-                    if (item.Name.Length > 35)
+                    if (item.Name.Length > 70)
+                    {
+                        mt103.Add(item.Name.Substring(0, 35));
+                        mt103.Add(item.Name.Substring(35, 35));
+                    }
+                    else if (item.Name.Length > 35 && item.Name.Length <= 70)
                     {
                         mt103.Add(item.Name.Substring(0, 35));
                         mt103.Add(item.Name.Substring(35));
@@ -260,7 +275,12 @@ namespace DocChanger.Controllers
                         mt103.Add(item.Name);
                     }
 
-                    if (item.Address.Length > 35)
+                    if (item.Address.Length > 70)
+                    {
+                        mt103.Add(item.Address.Substring(0, 35));
+                        mt103.Add(item.Address.Substring(35, 35));
+                    }
+                    if (item.Address.Length > 35 && item.Address.Length <= 70)
                     {
                         mt103.Add(item.Address.Substring(0, 35));
                         mt103.Add(item.Address.Substring(35));
@@ -355,7 +375,22 @@ namespace DocChanger.Controllers
                     if (x > 0)
                         mt103.Add("$");
 
-                    mt103.Add("{1:F01" + item.GrecosBank1.Substring(4, 8) + "XXXX0001000001}" + "{2:I100" + item.SWIFT + "XXXXN1}" + "{4:");
+                    var swiftLenght = item.SWIFT.Length;
+                    string swiftString = null;
+
+                    if (swiftLenght == 11)
+                        swiftString = item.SWIFT;
+                    else if (swiftLenght == 10)
+                        swiftString = item.SWIFT + "X";
+                    else if (swiftLenght == 9)
+                        swiftString = item.SWIFT + "XX";
+                    else if (swiftLenght == 8)
+                        swiftString = item.SWIFT + "XXX";
+                    else
+                        swiftString = null;
+
+
+                    mt103.Add("{1:F01" + item.GrecosBank1.Substring(4, 8) + "XXXX0001000001}" + "{2:I100" + swiftString + "XN1}" + "{4:");
                     mt103.Add(":20:2");
                     mt103.Add(":32A:" + item.Date.ToString("yyMMdd") + item.Currency + item.Amount.ToString("F", CultureInfo.CurrentCulture));
                     mt103.Add(":50:" + "GRECOS HOLIDAY");
@@ -366,11 +401,16 @@ namespace DocChanger.Controllers
                     mt103.Add(item.GrecosBank2.Substring(2));
                     mt103.Add("");
                     mt103.Add("               " + item.Country + " " + item.IBAN.Substring(0, 2));
-                    mt103.Add(":57A:" + item.SWIFT);
+                    mt103.Add(":57A:" + swiftString);
                     mt103.Add(":57D:");
                     mt103.Add(":59:/" + item.IBAN);
 
-                    if (item.Name.Length > 35)
+                    if (item.Name.Length > 70)
+                    {
+                        mt103.Add(item.Name.Substring(0, 35));
+                        mt103.Add(item.Name.Substring(35, 35));
+                    }
+                    else if (item.Name.Length > 35 && item.Name.Length <= 70)
                     {
                         mt103.Add(item.Name.Substring(0, 35));
                         mt103.Add(item.Name.Substring(35));
@@ -380,7 +420,12 @@ namespace DocChanger.Controllers
                         mt103.Add(item.Name);
                     }
 
-                    if (item.Address.Length > 35)
+                    if (item.Address.Length > 70)
+                    {
+                        mt103.Add(item.Address.Substring(0, 35));
+                        mt103.Add(item.Address.Substring(35, 35));
+                    }
+                    if (item.Address.Length > 35 && item.Address.Length <= 70)
                     {
                         mt103.Add(item.Address.Substring(0, 35));
                         mt103.Add(item.Address.Substring(35));
