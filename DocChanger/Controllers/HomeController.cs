@@ -73,7 +73,7 @@ namespace DocChanger.Controllers
                         {
                             string[] rows = sreader.ReadLine().Split(';');
 
-                            var dateFromFile = rows[4].Split('.');
+                            var dateFromFile = rows[4].Split('-');
                             var day = Int32.Parse(dateFromFile[0]);
                             var month = Int32.Parse(dateFromFile[1]);
                             var year = Int32.Parse(dateFromFile[2]);
