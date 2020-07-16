@@ -11,6 +11,7 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json;
 using System.Globalization;
+using System.Text;
 
 namespace DocChanger.Controllers
 {
@@ -73,11 +74,42 @@ namespace DocChanger.Controllers
                         {
                             string[] rows = sreader.ReadLine().Split(';');
 
-                            var dateFromFile = rows[4].Split('-');
+
+                            //conversion of date format to ddmmyyyy
+                            char[] charArray = { '-', '.' };
+                            var dateFromFile = rows[4].Split(charArray);
+
+                            if (Int32.Parse(dateFromFile[0]) != 2 || Int32.Parse(dateFromFile[1]) != 2 || Int32.Parse(dateFromFile[2]) != 4)
+                            {
+                                ViewBag.Data = "Zły format daty - prawidłowy format to DD-MM-YYY";
+                            }
+
                             var day = Int32.Parse(dateFromFile[0]);
                             var month = Int32.Parse(dateFromFile[1]);
                             var year = Int32.Parse(dateFromFile[2]);
                             var dateConverted = new DateTime(year, month, day);
+
+                            //removes white space from GrecosBank1
+                            var GrecosBank1ToTable = rows[13].Trim().Split(' ');
+                            var GrecosBank1ToTableLenght = GrecosBank1ToTable.Length;
+                            StringBuilder GrecosBank1String = new StringBuilder();
+
+                            for (int i = 0; i < GrecosBank1ToTableLenght; i++)
+                            {
+                                var s = GrecosBank1ToTable[i];
+                                GrecosBank1String.Append(s);
+                            }
+
+                            //removes white space from GrecosBank2
+                            var GrecosBank2ToTable = rows[14].Trim().Split(' ');
+                            var GrecosBank2ToTableLenght = GrecosBank2ToTable.Length;
+                            StringBuilder GrecosBank2String = new StringBuilder();
+
+                            for (int i = 0; i < GrecosBank2ToTableLenght; i++)
+                            {
+                                var s = GrecosBank2ToTable[i];
+                                GrecosBank2String.Append(s);
+                            }
 
                             mt.Add(new ImportModel
                             {
@@ -94,8 +126,8 @@ namespace DocChanger.Controllers
                                 Currency = (Currency)Enum.Parse(typeof(Currency), rows[10], true),
                                 Title = rows[11],
                                 Commission = rows[12],
-                                GrecosBank1 = rows[13],
-                                GrecosBank2 = rows[14],
+                                GrecosBank1 = GrecosBank1String.ToString(),
+                                GrecosBank2 = GrecosBank2String.ToString(),
                                 Category = rows[15],
                                 Realisation = rows[16]
                             }) ;
