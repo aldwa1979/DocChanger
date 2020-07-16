@@ -81,7 +81,7 @@ namespace DocChanger.Controllers
 
                             if (Int32.Parse(dateFromFile[0]) != 2 || Int32.Parse(dateFromFile[1]) != 2 || Int32.Parse(dateFromFile[2]) != 4)
                             {
-                                ViewBag.Data = "Zły format daty - prawidłowy format to DD-MM-YYY";
+                                ViewBag.Data = "Zły format daty - prawidłowy format to DD-MM-YYYY";
                             }
 
                             var day = Int32.Parse(dateFromFile[0]);
