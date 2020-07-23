@@ -9,6 +9,6 @@ namespace DocChanger.Models
     {
         EUR = 1,
         PLN = 2,
-        DOL = 3
+        USD = 3
     }
 }

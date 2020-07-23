@@ -78,8 +78,10 @@ namespace DocChanger.Controllers
                             //conversion of date format to ddmmyyyy
                             char[] charArray = { '-', '.' };
                             var dateFromFile = rows[4].Split(charArray);
+                            var a = dateFromFile[0];
+                            var b = dateFromFile[0].Length;
 
-                            if (Int32.Parse(dateFromFile[0]) != 2 || Int32.Parse(dateFromFile[1]) != 2 || Int32.Parse(dateFromFile[2]) != 4)
+                            if (dateFromFile[0].Length != 2 || dateFromFile[1].Length != 2 || dateFromFile[2].Length != 4)
                             {
                                 ViewBag.Data = "Zły format daty - prawidłowy format to DD-MM-YYYY";
                             }
