@@ -54,6 +54,7 @@ namespace DocChanger.Controllers
             {
                 try
                 {
+                    var rowNumber = 1;
                     var mt = new List<ImportModel>();
                     string fileExtension = Path.GetExtension(postedFile.FileName);
                     var path = Path.Combine(_env.WebRootPath, postedFile.FileName);
@@ -72,7 +73,21 @@ namespace DocChanger.Controllers
 
                         while (!sreader.EndOfStream)
                         {
+                            rowNumber++;
                             string[] rows = sreader.ReadLine().Split(';');
+
+                            if (rows.Length > 17)
+                            {
+                                ViewBag.Lenght = $"Remove ; from {rowNumber} row in excel";
+                                return View();
+                            }
+
+
+                            if (rows.Length < 17)
+                            {
+                                ViewBag.Lenght = $"Add data to {rowNumber} row in excel";
+                                return View();
+                            }
 
 
                             //conversion of date format to ddmmyyyy
@@ -292,12 +307,9 @@ namespace DocChanger.Controllers
                     mt103.Add(":50:" + "GRECOS HOLIDAY");
                     mt103.Add("UL. GRUNWALDZKA 76 A");
                     mt103.Add("60-311 POZNAŃ");
-                    mt103.Add(":52D:" + item.GrecosBank1.Substring(2));
-                    mt103.Add(item.GrecosBank2.Substring(2));
-                    mt103.Add("");
-                    mt103.Add("               " + item.Country + " " + item.IBAN.Substring(0, 2));
+                    mt103.Add(":52A:/D/" + item.GrecosBank1);
+                    mt103.Add(item.GrecosBank2.Substring(4,8));
                     mt103.Add(":57A:" + item.SWIFT);
-                    mt103.Add(":57D:");
                     mt103.Add(":59:/" + item.IBAN);
 
                     if (item.Name.Length > 70)
@@ -357,8 +369,8 @@ namespace DocChanger.Controllers
 
                     mt103.Add(":71A:" + item.Commission);
                     mt103.Add(":72:");
-                    mt103.Add("");
-                    mt103.Add("/" + item.Realisation + "/");
+                        if (item.Commission == "OUR" || item.Commission == "SHA")
+                            mt103.Add(item.GrecosBank1);
                 }
 
                 var filename = "mt103_ING.pla";
