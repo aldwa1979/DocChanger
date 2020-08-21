@@ -368,9 +368,11 @@ namespace DocChanger.Controllers
                     }
 
                     mt103.Add(":71A:" + item.Commission);
-                    mt103.Add(":72:");
-                        if (item.Commission == "OUR" || item.Commission == "SHA")
-                            mt103.Add(item.GrecosBank1);
+
+                    if (item.Commission == "OUR" || item.Commission == "SHA")
+                    {
+                        mt103.Add(":72:" + item.GrecosBank2);
+                    }
                 }
 
                 var filename = "mt103_ING.pla";
