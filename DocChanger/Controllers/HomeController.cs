@@ -291,6 +291,7 @@ namespace DocChanger.Controllers
             try
             {
                 List<ImportModel> model = JsonConvert.DeserializeObject<List<ImportModel>>((string)TempData["MyNewData"]);
+                int x = 0;
 
                 List<string> mt103 = new List<string>();
 
@@ -301,8 +302,9 @@ namespace DocChanger.Controllers
 
                 foreach (var item in model)
                 {
+                    x++;
 
-                    mt103.Add(":20:2");
+                    mt103.Add(":20:" + x);
                     mt103.Add(":32A:" + item.Date.ToString("yyMMdd") + item.Currency + item.Amount.ToString("F", CultureInfo.CurrentCulture));
                     mt103.Add(":50:" + "GRECOS HOLIDAY");
                     mt103.Add("UL. GRUNWALDZKA 76 A");
