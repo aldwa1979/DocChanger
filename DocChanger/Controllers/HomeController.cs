@@ -309,9 +309,19 @@ namespace DocChanger.Controllers
                     mt103.Add(":50:" + "GRECOS HOLIDAY");
                     mt103.Add("UL. GRUNWALDZKA 76 A");
                     mt103.Add("60-311 POZNAŃ");
+
+                    //INT
                     mt103.Add(":52A:/D/" + item.GrecosBank1);
-                    mt103.Add(item.GrecosBank2.Substring(4,8));
+                    mt103.Add(item.GrecosBank2.Substring(4, 8));
+
+                    ////PLA
+                    //mt103.Add(":52D:" + item.GrecosBank1.Substring(2));
+                    //mt103.Add(item.GrecosBank2.Substring(2));
+                    //mt103.Add("");
+                    //mt103.Add("               " + item.Country + " " + item.IBAN.Substring(0, 2));
+
                     mt103.Add(":57A:" + item.SWIFT);
+                    //mt103.Add(":57D:");
                     mt103.Add(":59:/" + item.IBAN);
 
                     if (item.Name.Length > 70)
@@ -327,6 +337,7 @@ namespace DocChanger.Controllers
                     else
                     {
                         mt103.Add(item.Name);
+                        mt103.Add("");
                     }
 
                     if (item.Address.Length > 70)
@@ -334,7 +345,7 @@ namespace DocChanger.Controllers
                         mt103.Add(item.Address.Substring(0, 35));
                         mt103.Add(item.Address.Substring(35, 35));
                     }
-                    if (item.Address.Length > 35 && item.Address.Length <= 70)
+                    else if (item.Address.Length > 35 && item.Address.Length <= 70)
                     {
                         mt103.Add(item.Address.Substring(0, 35));
                         mt103.Add(item.Address.Substring(35));
@@ -342,6 +353,7 @@ namespace DocChanger.Controllers
                     else
                     {
                         mt103.Add(item.Address);
+                        mt103.Add(item.Country);
                     }
 
                     if (item.Title.Length <= 31)
@@ -369,12 +381,19 @@ namespace DocChanger.Controllers
                         mt103.Add(item.Title.Substring(101));
                     }
 
+                    //INT
                     mt103.Add(":71A:" + item.Commission);
 
                     if (item.Commission == "OUR" || item.Commission == "SHA")
                     {
                         mt103.Add(":72:" + item.GrecosBank2);
                     }
+
+                    ////PLA
+                    //mt103.Add(":71A:" + item.Commission);
+                    //mt103.Add(":72: 00 00 00 00");
+                    //mt103.Add("");
+                    //mt103.Add("/" + item.Realisation + "/");
                 }
 
                 var filename = "mt103_ING.pla";
