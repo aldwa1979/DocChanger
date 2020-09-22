@@ -387,6 +387,11 @@ namespace DocChanger.Controllers
                     if (item.Commission == "OUR" || item.Commission == "SHA")
                     {
                         mt103.Add(":72:" + item.GrecosBank2);
+                        mt103.Add("");
+                    }
+                    else
+                    {
+                        mt103.Add(":72:");
                     }
 
                     ////PLA
